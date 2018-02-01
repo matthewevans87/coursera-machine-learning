@@ -23,11 +23,39 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+%{
 
+values = [0.01; 0.03; 0.1; 0.3; 1; 3; 10; 30];
 
+currentBest = 1000000;
 
+for cIdx = 1 : size(values);
 
+    for sigmaIdx = 1 : size(values);
 
+        CTest = values(cIdx)
+        sigmaTest = values(sigmaIdx)
+        model = svmTrain(X, y, CTest, @(x1, x2) gaussianKernel(x1, x2, sigmaTest));
+        predictions = svmPredict(model, Xval);
+        predictError = mean(double(predictions ~= yval));
+
+        fprintf('Try C=%d, sigma=%d.\n', CTest, sigmaTest);
+
+        if(predictError < currentBest)
+            fprintf('New Best found: %d.\n', currentBest);
+            currentBest = predictError;
+            C = CTest;
+            sigma = sigmaTest;
+        endif
+
+    endfor
+
+endfor
+
+%}
+
+C = 1;
+sigma = 0.1;
 
 % =========================================================================
 
