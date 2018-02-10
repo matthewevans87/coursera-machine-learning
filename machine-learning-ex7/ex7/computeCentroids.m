@@ -26,7 +26,17 @@ centroids = zeros(K, n);
 % Note: You can use a for-loop over the centroids to compute this.
 %
 
+for k = 1:K;
 
+    %compute the average of all of the points assigned to centroid k.
+    C_k = sum( idx == k );
+
+    mu_k = (1/C_k) * sum( (idx == k) .* (X) );
+
+    centroids(k, :) = mu_k;
+
+
+endfor
 
 
 
